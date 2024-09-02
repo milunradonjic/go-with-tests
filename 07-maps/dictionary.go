@@ -1,6 +1,7 @@
 package main
 
 type Dictionary map[string]string
+type DictionaryErr string
 
 const (
 	ErrNotFound         = DictionaryErr("could not find the word you were looking for")
@@ -8,7 +9,10 @@ const (
 	ErrWordDoesNotExist = DictionaryErr("cannot update non-existing word")
 )
 
-type DictionaryErr string
+// Error satisfies the error interface by returning the string value of the DictionaryErr
+func (e DictionaryErr) Error() string {
+	return string(e)
+}
 
 func (d Dictionary) Search(word string) (string, error) {
 	definition, ok := d[word]
@@ -32,10 +36,6 @@ func (d Dictionary) Add(word, definition string) error {
 	}
 
 	return nil
-}
-
-func (e DictionaryErr) Error() string {
-	return string(e)
 }
 
 func (d Dictionary) Update(word, definition string) error {
